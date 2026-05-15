@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -15,19 +16,26 @@ var binPath string
 // TestMain builds the calc binary once before running the test cases, then
 // removes it afterward. Building once avoids paying `go build` cost per test.
 func TestMain(m *testing.M) {
+	log.SetFlags(0)
+	log.SetPrefix("calc-test: ")
+	log.Printf("creating temporary directory to host the compiled binary")
 	dir, err := os.MkdirTemp("", "calc-test-")
 	if err != nil {
 		panic(err)
 	}
 	binPath = filepath.Join(dir, "calc")
+	log.Printf("building calc binary at %s", binPath)
 	build := exec.Command("go", "build", "-o", binPath, ".")
 	build.Stderr = os.Stderr
 	if err := build.Run(); err != nil {
+		log.Printf("build failed; cleaning up and aborting")
 		os.RemoveAll(dir)
 		panic(err)
 	}
 
+	log.Printf("build succeeded; running test cases")
 	code := m.Run()
+	log.Printf("tests finished with exit code %d; cleaning up %s", code, dir)
 	os.RemoveAll(dir)
 	os.Exit(code)
 }
@@ -36,6 +44,7 @@ func TestMain(m *testing.M) {
 // the process exit code.
 func run(t *testing.T, args ...string) (string, string, int) {
 	t.Helper()
+	t.Logf("invoking %s with args %v", binPath, args)
 	cmd := exec.Command(binPath, args...)
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
@@ -148,7 +157,9 @@ func TestCalc(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			t.Logf("case %q: expecting exit=%d, stdout=%q, stderr~%q", tc.name, tc.wantCode, tc.wantOut, tc.wantErr)
 			stdout, stderr, code := run(t, tc.args...)
+			t.Logf("case %q: got exit=%d, stdout=%q, stderr=%q", tc.name, code, strings.TrimRight(stdout, "\n"), stderr)
 			if code != tc.wantCode {
 				t.Errorf("exit code = %d, want %d\nstderr: %s", code, tc.wantCode, stderr)
 			}
