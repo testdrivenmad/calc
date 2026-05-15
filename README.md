@@ -46,10 +46,12 @@ Supported operators:
 | -------- | ------- | ------------------------------------------------- |
 | `add`    | `+`     | Sum of all operands.                              |
 | `sub`    | `-`     | First operand minus each subsequent operand.      |
+| `mul`    | `x`, `*`| Product of all operands.                          |
+| `div`    | `/`     | First operand divided by each subsequent operand. |
 
 Numbers are parsed as `float64`. At least two operands are required; fewer
-operands, an unknown operator, or a non-numeric argument exits with code `2`
-and prints a usage or error message to stderr.
+operands, an unknown operator, a non-numeric argument, or a division by zero
+exits with code `2` and prints a usage or error message to stderr.
 
 ### Examples
 
@@ -71,13 +73,25 @@ $ ./calc add 0.1 0.2 0.3
 
 $ ./calc sub 1 5
 -4
+
+$ ./calc mul 2 3 4
+24
+
+$ ./calc x 1.5 2
+3
+
+$ ./calc div 100 2 5
+10
+
+$ ./calc / 7 2
+3.5
 ```
 
 ### Exit codes
 
 - `0` — success, result printed to stdout.
-- `2` — usage error (too few args, unknown operator, or unparseable number);
-  diagnostic printed to stderr.
+- `2` — usage error (too few args, unknown operator, unparseable number, or
+  division by zero); diagnostic printed to stderr.
 
 ## Test
 

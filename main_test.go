@@ -97,6 +97,42 @@ func TestCalc(t *testing.T) {
 			wantCode: 0,
 		},
 		{
+			name:     "mul multiple",
+			args:     []string{"mul", "2", "3", "4"},
+			wantOut:  "24",
+			wantCode: 0,
+		},
+		{
+			name:     "mul symbol alias star",
+			args:     []string{"*", "5", "6"},
+			wantOut:  "30",
+			wantCode: 0,
+		},
+		{
+			name:     "mul symbol alias x",
+			args:     []string{"x", "1.5", "2"},
+			wantOut:  "3",
+			wantCode: 0,
+		},
+		{
+			name:     "div multiple",
+			args:     []string{"div", "100", "2", "5"},
+			wantOut:  "10",
+			wantCode: 0,
+		},
+		{
+			name:     "div symbol alias",
+			args:     []string{"/", "7", "2"},
+			wantOut:  "3.5",
+			wantCode: 0,
+		},
+		{
+			name:     "div by zero errors",
+			args:     []string{"div", "1", "0"},
+			wantCode: 2,
+			wantErr:  "division by zero",
+		},
+		{
 			name:     "too few args prints usage",
 			args:     []string{"add", "1"},
 			wantCode: 2,
@@ -110,7 +146,7 @@ func TestCalc(t *testing.T) {
 		},
 		{
 			name:     "unknown operator prints usage",
-			args:     []string{"mul", "2", "3"},
+			args:     []string{"mod", "2", "3"},
 			wantCode: 2,
 			wantErr:  "usage:",
 		},

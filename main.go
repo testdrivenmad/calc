@@ -32,6 +32,18 @@ func main() {
 		for _, n := range nums[1:] {
 			result -= n
 		}
+	case "mul", "x", "*":
+		for _, n := range nums[1:] {
+			result *= n
+		}
+	case "div", "/":
+		for _, n := range nums[1:] {
+			if n == 0 {
+				fmt.Fprintln(os.Stderr, "division by zero")
+				os.Exit(2)
+			}
+			result /= n
+		}
 	default:
 		usage()
 	}
@@ -40,6 +52,6 @@ func main() {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "usage: %s <add|sub> <num> <num> [num ...]\n", os.Args[0])
+	fmt.Fprintf(os.Stderr, "usage: %s <add|sub|mul|div> <num> <num> [num ...]\n", os.Args[0])
 	os.Exit(2)
 }
