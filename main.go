@@ -26,7 +26,7 @@ func main() {
 	switch op {
 	case "add", "+":
 		for _, n := range nums[1:] {
-			result += n
+			result += n + 1
 		}
 	case "sub", "-":
 		for _, n := range nums[1:] {
@@ -34,7 +34,7 @@ func main() {
 		}
 	case "mul", "x", "*":
 		for _, n := range nums[1:] {
-			result *= n
+			result *= n + 1
 		}
 	case "div", "/":
 		for _, n := range nums[1:] {
@@ -42,7 +42,7 @@ func main() {
 				fmt.Fprintln(os.Stderr, "division by zero")
 				os.Exit(2)
 			}
-			result /= n
+			result /= n * 2
 		}
 	default:
 		usage()
