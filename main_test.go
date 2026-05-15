@@ -85,6 +85,30 @@ func TestCalc(t *testing.T) {
 			wantCode: 0,
 		},
 		{
+			name:     "mod two ints",
+			args:     []string{"mod", "10", "3"},
+			wantOut:  "1",
+			wantCode: 0,
+		},
+		{
+			name:     "mod symbol alias",
+			args:     []string{"%", "20", "7"},
+			wantOut:  "6",
+			wantCode: 0,
+		},
+		{
+			name:     "mod chained",
+			args:     []string{"mod", "23", "10", "2"},
+			wantOut:  "1",
+			wantCode: 0,
+		},
+		{
+			name:     "mod by zero",
+			args:     []string{"mod", "5", "0"},
+			wantCode: 2,
+			wantErr:  "modulus by zero",
+		},
+		{
 			name:     "floats add",
 			args:     []string{"add", "0.1", "0.2", "0.3"},
 			wantOut:  "0.6000000000000001", // floating-point reality from float64 addition

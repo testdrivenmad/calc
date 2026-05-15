@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 )
@@ -32,6 +33,14 @@ func main() {
 		for _, n := range nums[1:] {
 			result -= n
 		}
+	case "mod", "%":
+		for _, n := range nums[1:] {
+			if n == 0 {
+				fmt.Fprintln(os.Stderr, "modulus by zero")
+				os.Exit(2)
+			}
+			result = math.Mod(result, n)
+		}
 	default:
 		usage()
 	}
@@ -40,6 +49,6 @@ func main() {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "usage: %s <add|sub> <num> <num> [num ...]\n", os.Args[0])
+	fmt.Fprintf(os.Stderr, "usage: %s <add|sub|mod> <num> <num> [num ...]\n", os.Args[0])
 	os.Exit(2)
 }
