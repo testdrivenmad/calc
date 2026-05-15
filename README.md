@@ -46,6 +46,7 @@ Supported operators:
 | -------- | ------- | ------------------------------------------------- |
 | `add`    | `+`     | Sum of all operands.                              |
 | `sub`    | `-`     | First operand minus each subsequent operand.      |
+| `mod`    | `%`     | First operand modulo each subsequent operand, applied left-to-right (uses `math.Mod` for `float64`). |
 
 Numbers are parsed as `float64`. At least two operands are required; fewer
 operands, an unknown operator, or a non-numeric argument exits with code `2`
@@ -71,13 +72,19 @@ $ ./calc add 0.1 0.2 0.3
 
 $ ./calc sub 1 5
 -4
+
+$ ./calc mod 10 3
+1
+
+$ ./calc % 23 10 2
+1
 ```
 
 ### Exit codes
 
 - `0` — success, result printed to stdout.
-- `2` — usage error (too few args, unknown operator, or unparseable number);
-  diagnostic printed to stderr.
+- `2` — usage error (too few args, unknown operator, unparseable number, or
+  modulus by zero); diagnostic printed to stderr.
 
 ## Test
 
